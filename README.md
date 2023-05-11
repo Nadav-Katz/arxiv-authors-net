@@ -10,6 +10,6 @@ network = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json', max_rows=1
 
 # present as df:
 df = network.build_network_df()
-print(df.head(100))
+print(df.head(10)) # presents the top 10 rows of the data frame
 ```
 
