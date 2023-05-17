@@ -21,3 +21,8 @@ df = network_nt.build_network_df()
 # write to pkl:
 pd.to_pickle(df, "colab_net.pkl", compression='gzip')
 ```
+
+you can also convert the network into networkx graph object (takes time):
+```python
+G = network.to_networkx()
+```
