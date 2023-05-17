@@ -1,26 +1,18 @@
+from dataclasses import dataclass
 import json
-# import networkx as nx
+import networkx as nx
 from datetime import datetime
 import pandas as pd
 from collections import defaultdict
-
-
-def read_arxiv_data(filename):
-    with open(filename) as f:
-        for line in f:
-            paper = json.loads(line)
-            authors = paper.get('authors_parsed', [])
-            versions = paper.get('versions', [])
-            doi = paper.get('doi')
-            yield paper['id'], doi, authors, versions
-
+from typing import List, Dict, Any
+from tqdm import tqdm
 
 
 class ArxivDataGenerator:
     def __init__(self, filename, max_rows=None):
         self.filename = filename
         self.max_rows = max_rows
-        
+
     def __iter__(self):
         with open(self.filename, 'r', encoding='utf-8') as f:
             for i, line in enumerate(f):
@@ -36,34 +28,52 @@ class AuthorsNetwork:
         self.network_df = None
     
     def build_network_df(self):
-        network_dict = {'author1': [], 'author2': [], 'paper_count': []}
-        paper_count = defaultdict(int)  # dictionary to keep track of paper counts
+        network_dict = {'author1': [], 'author2': [], 'paper_ids': [], 'paper_dates': []}
+        paper_ids = defaultdict(list)  # dictionary to keep track of paper ids
+        paper_dates = defaultdict(list)
 
-        for paper in self.data_generator:
+        for paper in tqdm(self.data_generator):
+            # paper = Paper(**line)
+            paper_id = paper['id']
+            # paper_id = paper.id 
+            paper_date = [v['created'] for v in paper['versions']]
+            # paper_date = [v['created'] for v in paper.versions]
+            dt = [datetime.strptime(d, '%a, %d %b %Y %H:%M:%S %Z') for d in paper_date]  
+            paper_date = [d.strftime('%d/%m/%Y') for d in dt]
+            paper_date = max(paper_date)
             authors = paper['authors_parsed']
+            # authors = paper.authors
+            
             for i in range(len(authors)):
                 for j in range(i+1, len(authors)):
                     author1 = tuple(authors[i])
                     author2 = tuple(authors[j])
                     if author1 != author2:
-                        # update paper count for the author pair
-                        paper_count[(author1, author2)] += 1
+                        # update paper ids for the author pair
+                        paper_ids[(author1, author2)].append(paper_id)
+                        paper_dates[(author1, author2)].append(paper_date)
 
-        # add edges to network_dict based on paper count
-        for (author1, author2), count in paper_count.items():
+
+        # add edges to network_dict based on paper ids
+        for ids, dates in zip(paper_ids.items(), paper_dates.items()):
+            (author1, author2), id_p = ids
+            (_, _), date_p = dates           
             network_dict['author1'].append(author1)
             network_dict['author2'].append(author2)
-            network_dict['paper_count'].append(count)
+            network_dict['paper_ids'].append(id_p)
+            network_dict['paper_dates'].append(date_p)
 
         network_df = pd.DataFrame(network_dict)
         return network_df
-        
-    
+
     def to_networkx(self):
         G = nx.Graph()
-        G.add_weighted_edges_from(self.network_df.values)
+        for _, row in self.network_df.iterrows():
+            author1 = row['author1']
+            author2 = row['author2']
+            paper_ids = row['paper_ids']
+            G.add_edge(author1, author2, papers=paper_ids)
         return G
     
 
 ############################
-
