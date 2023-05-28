@@ -9,7 +9,7 @@ A short example of how to use the code to build the network:
 To create a net from the entire file, use `max_rows=None`.
 
 ```python
-from MT_net import AuthorsNetwork
+from authors_net.builder import AuthorsNetwork
 import pandas as pd 
 
 # define the network creator object: 
