@@ -1,8 +1,8 @@
-from MT_net import AuthorsNetwork
+from authors_net.builder import AuthorsNetwork
 import pandas as pd 
 
 # create net: 
-network_nt = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json', max_rows=100000, chunk_size=100)
+network_nt = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json', max_rows=None, chunk_size=10)
 
 # create network:
 df = network_nt.build_network_df()

@@ -1,5 +1,5 @@
 # from network import AuthorsNetwork as Reg
-from MT_net import AuthorsNetwork as MT
+from authors_net.builder import AuthorsNetwork as MT
 
 # create net: 
 # network_reg = Reg(filename='arxiv-metadata-oai-snapshot.json', max_rows=10000)

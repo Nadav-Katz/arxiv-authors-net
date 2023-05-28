@@ -37,8 +37,8 @@ class AuthorsNetwork:
         self.queue = Queue()
         self.network_dict = defaultdict(list)
         self.network_df = None
-        self.num_producers = 2
-        self.num_consumers = 4
+        self.num_producers = 1
+        self.num_consumers = 1
 
     def _process_data(self, data, progress_bar):
         for i, paper in enumerate(data):
@@ -89,8 +89,9 @@ class AuthorsNetwork:
             # progress_bar.update(1)
 
     def build_network_df(self):
-        total_papers = self.max_rows if self.max_rows is not None else "Unknown"
+        total_papers = self.max_rows if self.max_rows is not None else 2231517
         progress_bar = tqdm(total=total_papers, desc="Creating network")
+
 
         self.producers = [Thread(target=self._produce_data, args=(progress_bar,)) for _ in range(self.num_producers)]
         self.consumers = [Thread(target=self._consume_data, args=(progress_bar,)) for _ in range(self.num_consumers)]
