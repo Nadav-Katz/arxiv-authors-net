@@ -11,8 +11,8 @@ setup(
     # Needed for dependencies
     install_requires=['pandas', 'networkx', 'tqdm'],
     # *strongly* suggested for sharing
-    version='0.1',
-    description='An example of a python package from pre-existing code',
+    version='0.2',
+    description='An python package for craeting Arxiv Co-Authorship network',
     # We will also need a readme eventually (there will be a warning)
     long_description=open('README.md').read(),
 )

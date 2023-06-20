@@ -77,3 +77,9 @@ class AuthorsNetwork:
     
 
 ############################
+
+# ## old version: 
+# net = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json')
+# df_1 = net.build_network_df()
+
+# pd.to_pickle(df_1, "colab_net.pkl", compression='gzip')
