@@ -4,10 +4,10 @@ import networkx as nx
 
 # create net: 
 network_nt = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json',
-                            max_rows=100000,
+                            max_rows=None,
                             chunk_size=100,
                             extra_edge_features=False, 
-                            num_consumers=3, num_producers=1)
+                            num_consumers=2, num_producers=1)
 # create network:
 df = network_nt.build_network_df()
 

@@ -8,7 +8,7 @@ setup(
     packages=['authors_net'],
     # Needed for dependencies
     install_requires=['pandas', 'networkx', 'tqdm'],
-    version='0.2',
+    version='0.2.1',
     description='A code for creating a authors collaboration network from the arxiv dataset',
     # Readme
     long_description=open('README.md').read(),
