@@ -2,7 +2,7 @@ import json
 import pandas as pd
 from collections import defaultdict
 from queue import Queue
-from threading import Thread
+from threading import Thread, Lock
 from datetime import datetime
 from tqdm import tqdm
 import networkx as nx
@@ -41,6 +41,7 @@ class AuthorsNetwork:
         self.network_df = None
         self.num_producers = num_producers
         self.num_consumers = num_consumers
+        self.lock = Lock()
         self.extra_edge_features = extra_edge_features
 
     
@@ -71,28 +72,30 @@ class AuthorsNetwork:
 
     
     def _consume_data(self, progress_bar):
+
         while True:
             try:
-                author1, author2, paper_id, paper_date = self.queue.get(timeout=1)
-                if (author1, author2) in self.network_dict.keys():
-                    if self.extra_edge_features:
-                        ind = next(
-                            (
-                                idx
-                                for idx, p_id in enumerate(self.network_dict[(author1, author2)]['paper_ids'])
-                                if p_id == paper_id
-                            ),
-                            None)
-                        
-                        if ind is None:
-                            self.network_dict[(author1, author2)]['paper_ids'].append(paper_id)
-                            self.network_dict[(author1, author2)]['paper_dates'].append(paper_date)                
-                    self.network_dict[(author1, author2)]['paper_count'] += 1  # Update paper count
-                else:
-                    if self.extra_edge_features:
-                        self.network_dict[(author1, author2)] = {'paper_ids': [paper_id], 'paper_dates': [paper_date], 'paper_count': 1}
+                with self.lock:
+                    author1, author2, paper_id, paper_date = self.queue.get(timeout=1)
+                    if (author1, author2) in self.network_dict.keys():
+                        if self.extra_edge_features:
+                            ind = next(
+                                (
+                                    idx
+                                    for idx, p_id in enumerate(self.network_dict[(author1, author2)]['paper_ids'])
+                                    if p_id == paper_id
+                                ),
+                                None)
+                            
+                            if ind is None:
+                                self.network_dict[(author1, author2)]['paper_ids'].append(paper_id)
+                                self.network_dict[(author1, author2)]['paper_dates'].append(paper_date)                
+                        self.network_dict[(author1, author2)]['paper_count'] += 1  # Update paper count
                     else:
-                        self.network_dict[(author1, author2)] = {'paper_count': 1}
+                        if self.extra_edge_features:
+                            self.network_dict[(author1, author2)] = {'paper_ids': [paper_id], 'paper_dates': [paper_date], 'paper_count': 1}
+                        else:
+                            self.network_dict[(author1, author2)] = {'paper_count': 1}
             except:
                 break
 
