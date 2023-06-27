@@ -1,7 +1,7 @@
 # Arxiv co-authorship network
 The goal of this repository, is to provide a way to create an undirected network of authors, where each node represents an author, and each edge represents a co-authorship relation. Each edge is weighted by the number of papers written together by the connected authors, and extra features such as paper id and the upload date to Arxiv are also available. 
 
-To address the space and time takes to process the vast amount of data in this dataset, and to speed things up a little, we used multi-threading, implemented according to the "producer-consumer" design pattern, which helps to address the problems rises using multi-threding in such problems.
+To address the space and time takes to process the vast amount of data in this dataset, and to speed things up a little, we used multi-threading, implemented according to the "producer-consumer" design pattern, which helps to address the problems rises using multi-threading in such problems.
  
 ## installation:
 ```
