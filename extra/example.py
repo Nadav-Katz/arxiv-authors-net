@@ -2,12 +2,13 @@ from authors_net.builder import AuthorsNetwork
 import pandas as pd 
 import networkx as nx
 
+
 # create net: 
 network_nt = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json',
-                            max_rows=None,
-                            chunk_size=100,
-                            extra_edge_features=False, 
-                            num_consumers=2, num_producers=1)
+                                max_rows=10000,
+                                chunk_size=1000,
+                                extra_edge_features=False, 
+                                num_workers=2)
 # create network:
 df = network_nt.build_network_df()
 

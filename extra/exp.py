@@ -22,3 +22,15 @@ df.sort_values(by='len', ascending=False).head(10)
 # import pandas as pd 
 
 # pd.to_pickle(df, "colab_net.pkl", compression='gzip')
+
+network_nt = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json',
+                        max_rows=None,
+                        chunk_size=100,
+                        extra_edge_features=False, 
+                        num_consumers=1, num_producers=1)
+
+# create network:
+df = network_nt.build_network_df()
+
+# save file: 
+pd.to_pickle(df, "colab_net.pkl", compression='gzip')

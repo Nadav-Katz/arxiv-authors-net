@@ -19,19 +19,20 @@ from authors_net.builder import AuthorsNetwork
 import pandas as pd 
 
 # define the network creator object:
-network = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json', 
-                         max_rows=None,
-                         chunk_size=100,
-                         extra_edge_features=False, 
-                         num_consumers=3, num_producers=1)
+network = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json',
+                         max_rows=10000,
+                         chunk_size=1000,
+                         extra_edge_features=False,
+                         num_workers=2)
 
 # create network edge list (DataFrame):
 df = network.build_network_df()
 
 # write to pkl:
 pd.to_pickle(df, "colab_net.pkl", compression='gzip')
+
 ```
-you can also convert the network into networkx graph object (takes some time):
+You can also convert the network into `networkx` graph object for further analysis (takes some time):
 
 ```python
 G = network.to_networkx()
