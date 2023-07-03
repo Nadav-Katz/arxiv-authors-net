@@ -28,10 +28,11 @@ network = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json',
 # create network edge list (DataFrame):
 df = network.build_network_df()
 
-# write to pkl:
-pd.to_pickle(df, "colab_net.pkl", compression='gzip')
 
 ```
+While working, a folder named `network_data_files` is automatically created. the network generator saves checkpoints while generating, so if for some reason the code stopped, all you need to do is create an instance of `AuthorsNetwork` class, with the argument `resume=True`. when activated, the builder will look for the folder created with the previous builder, and will resume the process from the last paper processed.  
+
+
 You can also convert the network into `networkx` graph object for further analysis (takes some time):
 
 ```python
