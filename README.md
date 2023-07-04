@@ -29,7 +29,8 @@ df = network.build_network_df()
 
 
 ```
-While working, a folder named `network_data_files` is automatically created. the network generator saves checkpoints while generating, so if for some reason the code stopped, all you need to do is create an instance of `AuthorsNetwork` class, with the argument `resume=True`. when activated, the builder will look for the folder created with the previous builder, and will resume the process from the last paper processed: 
+## Building with breaks: 
+While working, a folder named `network_data_files` is automatically created. the network generator saves checkpoints of the processed data while generating it (and also cleans the used memory while doing so), so if for some reason the code stopped, all you need to do is create an instance of `AuthorsNetwork` class with the same arguments, and add `resume=True`. when activated, the builder will look for the folder created with the previous builder, and will resume the process from the last paper processed until iterating through `max_rows` is completed: 
 ```python
 network = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json',
                          max_rows=10000,
@@ -38,9 +39,14 @@ network = AuthorsNetwork(filename='arxiv-metadata-oai-snapshot.json',
                          num_workers=2,
                          resume=True)
 
-``` 
-You can also convert the network into `networkx` graph object for further analysis (may take some time):
+df = network.build_network_df()
+```
+upon finishing, `df` will contain the united entire data frame from all runs.
 
+## Additional features:
+When using `extra_egde_features=True`, each edge (row in the network dataframe) containes extra two columns: paper_ids, and paper dates, which are the paper ids in Arxive and last version upload dates. 
+
+You can also convert the network into `networkx` graph object for further analysis (may take some time):
 ```python
 G = network.to_networkx()
 ```
