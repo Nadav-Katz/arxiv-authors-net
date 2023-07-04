@@ -21,5 +21,3 @@ g = network_nt.to_networkx()
 # interesting measures:
 g.number_of_edges()
 g.number_of_nodes()
-nx.number_connected_components(g)
-nx.katz_centrality(g)
