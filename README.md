@@ -9,7 +9,7 @@ pip install git+https://github.com/Nadav-Katz/arxiv-authors-net.git#egg=AuthorsN
 ```
 
 ## How to use:
-The input file to the builder should be the original Arxiv dataset from kaggle, or one with identical structure (a subset for example).
+The input file to the builder should be the original [Arxiv dataset from kaggle](https://www.kaggle.com/datasets/Cornell-University/arxiv), or one with identical structure (a subset for example).
 To create the network from the entire file, use `max_rows=None`.
 In order to create a network with some edge features, such as Arxiv paper id and last upload date, use `extra_edge_features=True`.
 
